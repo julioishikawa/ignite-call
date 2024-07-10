@@ -11,11 +11,46 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
-  name     String
+  id        String   @id @default(uuid())
+  username  String   @unique
+  name      String
+  email     String?  @unique
+  avatarUrl String?
+  createdAt DateTime @default(now())
 
-  created_at DateTime @default(now())
+  accounts Account[]
+  sessions Session[]
 
   @@map("users")
+}
+
+model Account {
+  id                   String  @id @default(cuid())
+  userId               String
+  providerType         String
+  provider             String
+  providerAccountId    String
+  refreshToken         String?
+  accessToken          String?
+  accessTokenExpiresAt Int?
+  tokenType            String?
+  scope                String?
+  idToken              String?
+  sessionState         String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  expires      DateTime
+  sessionToken String   @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
