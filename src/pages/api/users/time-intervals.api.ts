@@ -40,7 +40,7 @@ export default async function handler(
         data: {
           weekDay: interval.weekDay,
           timeStartInMinutes: interval.startTimeInMinutes,
-          TimeEndInMinutes: interval.endTimeInMinutes,
+          timeEndInMinutes: interval.endTimeInMinutes,
           userId: session.user?.id,
         },
       })
